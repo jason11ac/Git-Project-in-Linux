@@ -1,0 +1,21 @@
+
+This gitk is showing a visual view of the git repository set up for emacs
+that was worked on by Eggert himself. 
+
+There are five windows total in the view. The top left shows all the changes
+and merges with a visual line and dot diagram. A left most line is the master 
+line and when a merge master happens the dot for that certain line moves to
+the master line. The diagram basically shows all the heads, branches and 
+commits that were made.
+
+The bottom left window contains the SHAI ID and info about the selected commit, 
+merge or change. This info includes the name of the change, author, committer, 
+parents, children, branches, follows and precedes.
+
+The bottom right window can show comments, patched files, a tree of files
+and more information if needed.
+
+The top right most window has the dates for all the changes in the top left.
+
+Finally, the top middle window has the author of the commit and their email info
+from git.

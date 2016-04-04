@@ -1,0 +1,173 @@
+~~~~~~~~~
+lab4.txt
+~~~~~~~~~
+
+~~~~~~
+Setup
+~~~~~~
+
+First I used the git command to get the Diffutils respository and
+make it a directory on my seasnet server using this command:
+
+	git clone git://git.savannah.gnu.org/diffutils.git
+
+Then I copied the log of changes from git log to git-log.txt using 
+the command:
+
+	git log > git-log.txt
+
+This created an untracked file called git-log.txt in the working 
+directory. Next I repeated the above step but with the git 
+tags now. I typed:
+
+	git tag > git-tags.txt
+
+which created the untracked file git-tags.txt. 
+
+
+~~~~~
+Lab4
+~~~~~
+
+My next step was to find the commit entitled: "maint: quote 'like this' 
+or "like this", not `like this" and generate a patch for it by putting 
+it into a file called quote-patch.txt. I searched my git-log.txt file in 
+emacs using Ctrl-s and typing in maint: quote 'like this'. I found the 
+commit, copied the commit hash code and then used the command:
+
+	git show 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f > quote-patch.txt
+
+to put the commit into it's own file called quote-patch.txt. Next, I 
+checkedout version 3.0 of Diffutils by typing:
+
+	git checkout v3.0 -b Backticks
+
+and the ouput read:
+
+HEAD is now at 022cd5c... version 3.0
+
+and 
+
+Switched to a new branch 'Backticks'
+
+Typing git status right after gave me this output:
+
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	#git-log.txt#
+#	git-log.txt
+#	git-tags.txt
+#	quote-patch.txt
+nothing added to commit but untracked files present (use "git add" to track)
+
+Next i ran bootstrap (./bootstrap), configure (./configure), and make, which
+gave me random errors about the get function. I then switched from server 09 
+to server 01 and the errors disappeared. I then tested ./diff --help and saw 
+the unwanted backticks for v3.0. 
+
+I then typed:
+
+	patch -p1 < quote-patch.txt 
+
+which invoked output asking me multiple times whether I wanted 
+to skip certain patches in v3.0. I pressed RETURN repeatedly 
+to finish the command, which finally outputed:
+
+	6 out of 6 hunks ignored
+
+as the final line. The -p1 in the command above skips unnecessary
+patches that just change names. Typing git status outputted a long 
+list of modified and untracked files in the working directory.
+
+I navigated to the src directory, which contains all of the source 
+executables that need to be changed/patched. I typed git status -uno
+which showed me all of modified git files in src that I need to 
+review. I started by reverting all the changes made to non .c
+files using the vc-revert keystroke (Ctrl-x v u) as these changes were not 
+necessary for the patch. I then went into all the c files and used 
+the vc-diff buffer (Ctrl-x v =) to check all of the changes. Any change
+that only affected comments and were unnecessary were reverted using the 
+Ctrl-c Ctrl-a y keystroke. Changes to characters string constants were kept
+patched. Once all 7 c files were patched correctly, I remade all of them 
+and typed ./diff --help to see that the backticks were eliminated and replaced 
+by single quotes. 
+
+Next, I examined the reject files and used Ctrl-c Ctrl-c to quickly find each
+spot in the corresponding c file. I then manually patched those spots.
+
+Once pressing git status, I now had 6 modified unstaged files and a bunch of 
+untracked files. I deleted all the unneeded untracked files beside the three
+below:
+
+	git-log.txt
+	git-tags.txt
+	quote-patch.txt
+
+as these files are important. I then copied all the patched changes and put 
+them in the file named quote-3.0-patch.txt using the command:
+
+	git diff > quote-3.0-patch.txt
+
+After checking all the patches by remaking everything and testing out the 
+commands:
+
+	./diff --help
+	./diff . -
+
+which all used single quotes rather than backticks showing that the patch 
+was successful.
+
+To test my patch I put my old source code and new code into the directories:
+
+	diffutils-3.0
+	diffutils-3.0-patch 
+
+respectively using the commands:
+
+cp src/* diffutils-3.0 
+cp src/* diffutils-3.0-patch/
+
+and compared them using the commands:
+
+/src/diff -pru diffutils-3.0 diffutils-3.0-patch > quote-3.0-test.txt 
+diff -u quote-3.0-test.txt quote-3.0-patch.txt
+
+It is clear the files were different and unsuprisingly all 
+the differences were changes in character string constants, so therefore,
+the differences were not innocuous.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

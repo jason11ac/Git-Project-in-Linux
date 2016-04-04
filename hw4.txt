@@ -1,0 +1,106 @@
+~~~~~~~~
+hw4.txt
+~~~~~~~~
+
+First step, was to checkout into a new branch called "quote". 
+I typed:
+
+	git checkout v3.0 -b quote
+
+to do this. Because the file quote-3.0-patch.txt was not on this
+new branch I then used the command below to transfer the file 
+from my Backticks v3.0 branch:
+
+	git checkout Backticks quote-3.0-patch.txt
+
+Once the file was transferred, I typed the patching command:
+
+	patch -p1 < quote-3.0-patch.txt 
+
+and the ouput simply read:
+
+	patching file src/cmp.c
+	patching file src/diff.c
+	patching file src/diff3.c
+	patching file src/dir.c
+	patching file src/sdiff.c
+	patching file src/util.c
+
+showing that the patch did it's job. 
+
+Next I opened diff.c in my src directory and used Ctrl-x 4 a
+to bring up a changelog. I then said what changes I made to all
+6 files, which were the same for each one:
+
+ 	January 27th 2016 - Jason Alvarez-Cohen
+
+    Changed all non-comment backticks (`) to single quotes (')
+
+I then saved and my file Changelog now held all the documented 
+changed I just made. 
+
+The next step was to commit all the changes and new files, so I 
+first put all the modified and untracked files on the staging
+area by using the command:
+
+	git add .
+
+before I commited all the changes with my ChangeLog file as the 
+commit message:
+
+	git commit -F ChangeLog
+
+Next, I used the git format-patch command to get my patch ready for
+others to use over servers. I used the command below for this:
+
+	git format-patch -1 --stdout > formatted-patch.txt
+
+which created a formatted-patch text file from the standard output
+of what was different against stage 1. 
+
+At this point my partner Zach Thomas was not at the point I was at 
+in the homework so I instead decided to create a new branch and test
+the git am command myself. I typed:
+
+	git checkout v3.0 -b tester
+	git am < formatted-patch.txt
+
+I then built the system using bootstrap, configure and make like before
+and the patch was implemented correctly. Once Zach was ready we both 
+confirmed that our patches worked using git am. After confirming the patch
+worked using am, I next made sure my ChangeLog worked with the commands:
+
+	make distdir
+	cd diffutils*
+
+This created the directory diffutils-3.0.1-094e. I checked the ChangeLog 
+in this directory and saw the message I wrote for creating my formatted
+patch file confirming that my ChangeLog was updated correctly.
+
+My next task was to implement and run gitk. I couldn't get it to work
+on my Mac terminal so I used a remote desktop connection to log onto the 
+seasnet servers and run ssh from there. Gitk worked this way and I found 
+the newest merge not after 2015-01-25 that was on this date:
+
+	2015-01-24 17:11:31
+
+I then took a screenshot of the picture and created a description, finishing
+the homework for week 4.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
